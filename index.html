@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Writing Today</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --surface2: #f0ede6;
+    --border: #e0dbd1;
+    --text: #1a1a18;
+    --text-muted: #6b6860;
+    --text-faint: #9b9890;
+    --accent: #2d5a3d;
+    --accent-light: #e8f0ea;
+    --accent-text: #1e3d29;
+    --warn: #7a3e1a;
+    --warn-bg: #fdf0e8;
+    --tag-narrative: #1a3a5c;
+    --tag-narrative-bg: #e8f0f8;
+    --tag-opinion: #5c3a1a;
+    --tag-opinion-bg: #f8f0e8;
+    --tag-reflection: #2d5a3d;
+    --tag-reflection-bg: #e8f0ea;
+    --tag-wouldyourather: #4a1a5c;
+    --tag-wouldyourather-bg: #f2e8f8;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+
+  .page { max-width: 620px; margin: 0 auto; }
+
+  .wordmark {
+    font-family: 'Lora', serif;
+    font-size: 13px;
+    color: var(--text-faint);
+    letter-spacing: 0.04em;
+    margin-bottom: 2rem;
+  }
+
+  .view { display: none; }
+  .view.active { display: block; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    font-family: 'Lora', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+    line-height: 1.3;
+  }
+
+  h2 {
+    font-family: 'Lora', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 1.25rem;
+  }
+
+  .prompt-type {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .prompt-type.narrative { color: var(--tag-narrative); }
+  .prompt-type.opinion { color: var(--tag-opinion); }
+  .prompt-type.reflection { color: var(--tag-reflection); }
+  .prompt-type.wouldyourather { color: var(--tag-wouldyourather); }
+
+  .prompt-text {
+    font-family: 'Lora', serif;
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--text);
+    background: var(--surface2);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    background: var(--surface);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  input[type="text"]:focus, input[type="password"]:focus {
+    border-color: var(--accent);
+  }
+
+  textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text);
+    background: var(--surface);
+    resize: vertical;
+    min-height: 200px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  textarea:focus { border-color: var(--accent); }
+
+  .field { margin-bottom: 1.25rem; }
+
+  .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .spacer { flex: 1; }
+
+  button {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 9px 18px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.15s;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+  }
+
+  button:hover { background: var(--surface2); }
+
+  button.primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  button.primary:hover { background: var(--accent-text); }
+
+  button.ghost {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    padding: 9px 6px;
+    font-size: 13px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  button.ghost:hover { color: var(--text); background: none; }
+
+  button.danger {
+    color: var(--warn);
+    border-color: #e8cfc0;
+    background: none;
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+
+  button.danger:hover { background: var(--warn-bg); }
+
+  .alert {
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+
+  .alert-success { background: var(--accent-light); color: var(--accent-text); border: 1px solid #c2d9c8; }
+  .alert-error { background: var(--warn-bg); color: var(--warn); border: 1px solid #e8cfc0; }
+
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.03em;
+  }
+
+  .tag.narrative { background: var(--tag-narrative-bg); color: var(--tag-narrative); }
+  .tag.opinion { background: var(--tag-opinion-bg); color: var(--tag-opinion); }
+  .tag.reflection { background: var(--tag-reflection-bg); color: var(--tag-reflection); }
+  .tag.wouldyourather { background: var(--tag-wouldyourather-bg); color: var(--tag-wouldyourather); }
+
+  .submission {
+    border-bottom: 1px solid var(--border);
+    padding: 1.25rem 0;
+  }
+  .submission:last-child { border-bottom: none; }
+  .sub-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+  .sub-name { font-weight: 500; font-size: 15px; }
+  .sub-time { font-size: 12px; color: var(--text-faint); margin-left: auto; }
+  .sub-prompt { font-size: 13px; color: var(--text-muted); font-style: italic; margin-bottom: 8px; line-height: 1.5; }
+  .sub-text { font-size: 15px; line-height: 1.7; white-space: pre-wrap; }
+
+  .empty { text-align: center; color: var(--text-muted); font-size: 14px; padding: 3rem 1rem; font-style: italic; }
+
+  .prompt-edit-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .prompt-edit-row:last-child { border-bottom: none; }
+
+  .prompt-edit-row textarea {
+    min-height: 64px;
+    font-size: 14px;
+    flex: 1;
+  }
+
+  .prompt-edit-row select {
+    width: 130px;
+    flex-shrink: 0;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    background: var(--surface);
+    color: var(--text);
+    outline: none;
+  }
+
+  .divider { height: 1px; background: var(--border); margin: 1.5rem 0; }
+
+  @media (max-width: 480px) {
+    .card { padding: 1.25rem; }
+    .prompt-text { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="wordmark">Writing Today</div>
+
+  <!-- STUDENT VIEW -->
+  <div id="view-student" class="view active">
+    <div class="card">
+      <div id="s-prompt-type" class="prompt-type"></div>
+      <div id="s-prompt-text" class="prompt-text"></div>
+
+      <div class="field">
+        <label>First name</label>
+        <input type="text" id="s-name" placeholder="Your first name" style="max-width: 240px;" autocomplete="off" />
+      </div>
+
+      <div class="field">
+        <label>Your response</label>
+        <textarea id="s-response" placeholder="Begin writing here..."></textarea>
+      </div>
+
+      <div id="s-alert"></div>
+
+      <div class="row">
+        <button class="primary" onclick="submitResponse()">Submit</button>
+        <button onclick="newPrompt()">Different prompt</button>
+        <div class="spacer"></div>
+        <button class="ghost" onclick="showLogin()">Teacher</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEACHER LOGIN -->
+  <div id="view-login" class="view">
+    <div class="card" style="max-width: 360px; margin: 0 auto;">
+      <h2>Teacher login</h2>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="t-pw" onkeydown="if(event.key==='Enter')checkLogin()" />
+      </div>
+      <div id="login-alert"></div>
+      <div class="row">
+        <button class="primary" onclick="checkLogin()">Log in</button>
+        <button class="ghost" onclick="show('view-student')">Back</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEACHER DASHBOARD -->
+  <div id="view-teacher" class="view">
+    <div class="row" style="margin-bottom: 1.25rem;">
+      <h2 style="margin: 0;">Submissions</h2>
+      <div class="spacer"></div>
+      <button onclick="showPromptEditor()">Edit prompts</button>
+      <button class="ghost" onclick="show('view-student')">Exit</button>
+    </div>
+    <div class="card">
+      <div id="submissions-list"></div>
+    </div>
+  </div>
+
+  <!-- PROMPT EDITOR -->
+  <div id="view-prompts" class="view">
+    <div class="row" style="margin-bottom: 1.25rem;">
+      <h2 style="margin: 0;">Edit prompts</h2>
+      <div class="spacer"></div>
+      <button class="primary" onclick="savePrompts()">Save changes</button>
+      <button onclick="addPrompt()">+ Add</button>
+      <button class="ghost" onclick="show('view-teacher')">Back</button>
+    </div>
+    <div id="save-alert"></div>
+    <div class="card">
+      <div id="prompt-editor"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const TEACHER_PASSWORD = "classroom23";
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/xpqyyboa";
+
+const TYPE_LABELS = {
+  narrative: "Creative writing",
+  opinion: "Opinion",
+  reflection: "Reflection",
+  wouldyourather: "Would you rather"
+};
+
+let prompts = [
+  { text: "You find a box on your doorstep with your name on it — no return address. What's inside? Write the story of what happens next.", type: "narrative" },
+  { text: "You wake up tomorrow with one ability no one else has. What is it, and what do you do with it?", type: "narrative" },
+  { text: "A character is running away from something — or toward something. Write the scene.", type: "narrative" },
+  { text: "Write about a moment when everything went wrong. What happened, and what did you do?", type: "narrative" },
+  { text: "Two strangers end up stuck in the same place for an hour. Write their conversation.", type: "narrative" },
+  { text: "You get a text from an unknown number. It says: 'Don't go to school tomorrow.' Write what happens next.", type: "narrative" },
+  { text: "Write a story that starts with the line: 'The last time I saw it, it was right here.'", type: "narrative" },
+  { text: "You get to redesign one rule at school. What do you change and why?", type: "opinion" },
+  { text: "Is it ever okay to lie to protect someone? Explain your thinking.", type: "opinion" },
+  { text: "Some people say home is a place. Others say it's a feeling. Which do you believe, and why?", type: "opinion" },
+  { text: "Is it more important to be liked or to be respected? Make your case.", type: "opinion" },
+  { text: "Should everyone be required to do a year of community service? Why or why not?", type: "opinion" },
+  { text: "Is it fair to judge someone by the choices they made when they were younger? Explain.", type: "opinion" },
+  { text: "What's something most people think is a big deal that actually isn't? Defend your answer.", type: "opinion" },
+  { text: "What's something you're better at now than you were a year ago? What changed?", type: "reflection" },
+  { text: "Describe a moment when you surprised yourself.", type: "reflection" },
+  { text: "What does a good day look like for you? Be specific.", type: "reflection" },
+  { text: "Write about a time you had to make a hard choice. You don't have to share the details — just how it felt.", type: "reflection" },
+  { text: "What's something you wish more people understood about you?", type: "reflection" },
+  { text: "Think about someone who has been kind to you. What did they do, and why did it matter?", type: "reflection" },
+  { text: "If you could go back and tell your younger self one thing, what would it be and why?", type: "reflection" },
+  { text: "What's something you used to believe that you no longer believe? What changed your mind?", type: "reflection" },
+  { text: "Would you rather be able to fly or be invisible? You can only pick one — explain why you chose it and what you'd actually do with that ability.", type: "wouldyourather" },
+  { text: "Would you rather always know the truth about everything, or be able to tell a convincing lie whenever you want? Explain your reasoning.", type: "wouldyourather" },
+  { text: "Would you rather live in a world with no music or no internet? Make the case for your choice.", type: "wouldyourather" },
+  { text: "Would you rather be famous for something you're proud of, or completely unknown but living exactly the life you want? Explain.", type: "wouldyourather" },
+  { text: "Would you rather have one incredibly close friend or a large group of good friends? Why?", type: "wouldyourather" }
+];
+
+let currentPrompt = null;
+
+function newPrompt() {
+  currentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+  const typeEl = document.getElementById('s-prompt-type');
+  typeEl.textContent = TYPE_LABELS[currentPrompt.type] || currentPrompt.type;
+  typeEl.className = 'prompt-type ' + currentPrompt.type;
+  document.getElementById('s-prompt-text').textContent = currentPrompt.text;
+  document.getElementById('s-response').value = '';
+  document.getElementById('s-alert').innerHTML = '';
+}
+
+async function submitResponse() {
+  const name = document.getElementById('s-name').value.trim();
+  const text = document.getElementById('s-response').value.trim();
+  const alertEl = document.getElementById('s-alert');
+
+  if (!name) {
+    alertEl.innerHTML = '<div class="alert alert-error">Please enter your first name.</div>';
+    return;
+  }
+  if (text.length < 20) {
+    alertEl.innerHTML = '<div class="alert alert-error">Keep going — write a bit more before submitting.</div>';
+    return;
+  }
+
+  const btn = document.querySelector('#view-student button.primary');
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+
+  try {
+    const res = await fetch(FORMSPREE_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        student_name: name,
+        prompt_type: TYPE_LABELS[currentPrompt.type] || currentPrompt.type,
+        prompt: currentPrompt.text,
+        response: text,
+        submitted_at: new Date().toLocaleString()
+      })
+    });
+
+    if (res.ok) {
+      alertEl.innerHTML = '<div class="alert alert-success">Submitted. Nice work.</div>';
+      document.getElementById('s-response').value = '';
+      setTimeout(() => { alertEl.innerHTML = ''; newPrompt(); }, 2500);
+    } else {
+      alertEl.innerHTML = '<div class="alert alert-error">Something went wrong. Try again.</div>';
+    }
+  } catch(e) {
+    alertEl.innerHTML = '<div class="alert alert-error">Could not connect. Check your internet and try again.</div>';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Submit';
+}
+
+function show(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function showLogin() {
+  document.getElementById('t-pw').value = '';
+  document.getElementById('login-alert').innerHTML = '';
+  show('view-login');
+}
+
+function checkLogin() {
+  if (document.getElementById('t-pw').value === TEACHER_PASSWORD) {
+    show('view-teacher');
+    renderSubmissions();
+  } else {
+    document.getElementById('login-alert').innerHTML = '<div class="alert alert-error">Wrong password.</div>';
+  }
+}
+
+function renderSubmissions() {
+  const el = document.getElementById('submissions-list');
+  el.innerHTML = '<div class="empty">Submissions are emailed to you via Formspree.<br>Log in at formspree.io to view them all.</div>';
+}
+
+function showPromptEditor() {
+  show('view-prompts');
+  renderPromptEditor();
+}
+
+function renderPromptEditor() {
+  const el = document.getElementById('prompt-editor');
+  el.innerHTML = prompts.map((p, i) => `
+    <div class="prompt-edit-row">
+      <textarea id="pe-text-${i}">${p.text}</textarea>
+      <select id="pe-type-${i}">
+        <option value="narrative" ${p.type==='narrative'?'selected':''}>Creative writing</option>
+        <option value="opinion" ${p.type==='opinion'?'selected':''}>Opinion</option>
+        <option value="reflection" ${p.type==='reflection'?'selected':''}>Reflection</option>
+        <option value="wouldyourather" ${p.type==='wouldyourather'?'selected':''}>Would you rather</option>
+      </select>
+      <button class="danger" onclick="removePrompt(${i})">Remove</button>
+    </div>
+  `).join('');
+}
+
+function addPrompt() {
+  prompts.push({ text: '', type: 'narrative' });
+  renderPromptEditor();
+  const rows = document.querySelectorAll('[id^="pe-text-"]');
+  if (rows.length) rows[rows.length-1].focus();
+}
+
+function removePrompt(i) {
+  prompts.splice(i, 1);
+  renderPromptEditor();
+}
+
+function savePrompts() {
+  for (let i = 0; i < prompts.length; i++) {
+    const t = document.getElementById(`pe-text-${i}`);
+    const ty = document.getElementById(`pe-type-${i}`);
+    if (t && ty) { prompts[i].text = t.value.trim(); prompts[i].type = ty.value; }
+  }
+  prompts = prompts.filter(p => p.text.length > 0);
+  document.getElementById('save-alert').innerHTML = '<div class="alert alert-success">Saved.</div>';
+  setTimeout(() => { document.getElementById('save-alert').innerHTML = ''; }, 2000);
+  renderPromptEditor();
+}
+
+newPrompt();
+</script>
+</body>
+</html>
